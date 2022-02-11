@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const Button = (props) => {
-    const { children, bg, border, width, padding } = props;
+    const { children, bg, border, width, padding, _onClick } = props;
 
     const styles ={
         bg: bg,
@@ -11,7 +11,7 @@ const Button = (props) => {
         padding: padding,
     }
     return (
-        <Elbtn {...styles}>{children}</Elbtn>
+        <Elbtn onClick={_onClick} {...styles}>{children}</Elbtn>
     )
 }
 
@@ -21,6 +21,7 @@ Button.defaultProps = {
     border: false,
     width: 'auto',
     padding: '8px',
+    _onClick: () => {},
 }
 
 const Elbtn = styled.button`
