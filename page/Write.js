@@ -12,8 +12,9 @@ const Write = (props) => {
                 <Text bold size='36px'>{is_edit ? '게시글 수정':'게시글 작성'}</Text>
             </Grid>
             <Grid width='50%' padding='16px' margin='10px auto' is_flex is_column>
-                
-                <Input non_label placeholder='제목을 입력해주세요.' />
+                <Grid width='100%' padding='0 16px 16px' >
+                    <Input non_label placeholder='제목을 입력해주세요.' />
+                </Grid>
 
                 <Grid width='80%' is_flex padding='10px'>
                     <Grid border padding='5px' is_flex is_column>    

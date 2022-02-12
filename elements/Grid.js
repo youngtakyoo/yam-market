@@ -5,7 +5,7 @@ const Grid = (props) => {
     const { children, width, padding,
          margin, border, is_flex, is_column,
          height, radius, is_float,is_hidden,
-         is_between
+         is_between, _onClick
          } = props;
 
     const styles = {
@@ -22,7 +22,7 @@ const Grid = (props) => {
         is_between: is_between,
     }
     return(
-        <GridBox {...styles}>
+        <GridBox onClick={_onClick} {...styles}>
             {children}
         </GridBox>
     )
@@ -40,6 +40,7 @@ Grid.defaultProps = {
     is_float: false,
     is_between: false,
     is_hidden: false,
+    _onClick: ()=>{},
 }
 
 const GridBox = styled.div`

@@ -1,9 +1,11 @@
 import React from "react";
 import { Grid, Text, Button, Image } from '../elements';
+import { useHistory } from "react-router-dom";
 
 const Post = (props) => {
     const [is_login,asd] = React.useState(true);
-
+    const history = useHistory();
+    const { post_id } = props;
 
     return(
         <Grid border width='80%' is_flex is_column margin='16px auto 8px' >
@@ -11,7 +13,7 @@ const Post = (props) => {
                 <Text bold >한 번도 사용 안 한 세탁기 팝니다.</Text>
                 {is_login &&
                 <Grid width='auto'>
-                    <Button bg='#fff'>수정</Button>
+                    <Button _onClick={()=>{history.push(`/write/${post_id}`)}} bg='#fff'>수정</Button>
                     <Button bg='#fff'>삭제</Button>
                 </Grid>}
             </Grid>
@@ -28,7 +30,7 @@ const Post = (props) => {
 }
 
 Post.defaultProps = {
-
+    post_id: 'jkasdk151asd3513'
 }
 
 export default Post;

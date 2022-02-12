@@ -17,7 +17,7 @@ const Input = (props) => {
     if(non_label){
         return(
          <Grid width={width}>    
-            <Elinput type={type} placeholder={placeholder} onChange={_onChange} />
+            <Elinput type={type} placeholder={placeholder} onChange={_onChange}></Elinput>
         </Grid>
         )
     }
@@ -52,6 +52,7 @@ const Elinput = styled.input`
     outline: none;
     border-bottom: solid 2px #444;
     padding: 4px;
+    width: 100%;
 `;
 
 export default Input;

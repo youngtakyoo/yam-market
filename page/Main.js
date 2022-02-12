@@ -11,6 +11,20 @@ const Main = (props) => {
 
     return (
         <Grid width='60%' margin='30px auto' padding='16px'>
+            <Grid is_flex padding='8px 0 24px'>
+                <Text bold>전체 게시글</Text>
+            </Grid>
+           <Card/>
+           <Card/>
+           <Card/>
+           <Card/>
+           <Card/>
+           <Card/>
+           <Card/>
+           <Card/>
+           <Card/>
+           <Card/>
+           <Card/>
            <Card/>
            <Card/>
            <Card/>
