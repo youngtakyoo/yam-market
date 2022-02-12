@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const Text = (props) => {
-    const {children, bold, size, margin, cursor} = props;
+    const {children,  _onClick, bold, size, margin, cursor} = props;
 
     const styles = {
         bold: bold,
@@ -11,7 +11,7 @@ const Text = (props) => {
         cursor: cursor,
     }
     return (
-        <Eltext {...styles}>{children}</Eltext>
+        <Eltext onClick={_onClick} {...styles}>{children}</Eltext>
     )
 }
 
@@ -20,7 +20,8 @@ Text.defaultProps = {
     bold: false,
     size: '24px',
     margin: '0px',
-    cursor: 'default'
+    cursor: 'default',
+    _onClick: ()=>{},
 }
 
 const Eltext = styled.p`

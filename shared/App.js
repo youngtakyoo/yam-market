@@ -11,6 +11,10 @@ function App() {
       <Header />
       <Route path='/' exact component={Main} />
       <Route path='/sign/:form' exact component={Sign} />
+      <Route path='/detail/:post_id' exact component={Detail} />
+    <Route path='/write' exact component={Write} />
+    <Route path='/write/:post_id' exact component={Write} />
+    <Route path='/bookmark' exact component={Bookmark} />
     </React.Fragment>
   );
 }

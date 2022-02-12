@@ -2,7 +2,8 @@ import React from "react";
 import styled from "styled-components";
 
 const Button = (props) => {
-    const { children, bg, border, width, padding, _onClick } = props;
+    const { children, bg, border,
+         width, padding, _onClick, is_float } = props;
 
     const styles ={
         bg: bg,
@@ -10,6 +11,14 @@ const Button = (props) => {
         width: width,
         padding: padding,
     }
+
+    if(is_float){
+
+        return(
+            <FloatBtn onClick={_onClick} >{children}</FloatBtn>
+        )
+    }
+
     return (
         <Elbtn onClick={_onClick} {...styles}>{children}</Elbtn>
     )
@@ -23,6 +32,23 @@ Button.defaultProps = {
     padding: '8px',
     _onClick: () => {},
 }
+
+const FloatBtn = styled.button`
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 40px;
+    position: fixed;
+    bottom: 100px;
+    right: 100px;
+    color: #222;
+    font-size: 36px;
+    cursor: pointer;
+    background-color: #222;
+    &: hover {
+        color: #fff;
+    }
+`
 
 const Elbtn = styled.button`
     border:none;

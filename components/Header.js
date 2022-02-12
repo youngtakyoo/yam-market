@@ -9,8 +9,8 @@ const Header = (props) => {
     if(is_login){
         return(
         <Grid padding='4px 16px' border='solid 5px #666' is_flex>
-            <Grid>
-                <Text cursor='pointer' bold size='40px' >YAM</Text>
+            <Grid width='auto'>
+                <Text _onClick={()=>{history.push('/')}} bold size='40px' >YAM</Text>
             </Grid>
             <Grid width='auto' margin='0 5px 0 5px'>
                 <Button border='solid 1px #000' bg='#fff' width='70px'>북마크</Button>
@@ -23,9 +23,9 @@ const Header = (props) => {
     }
 
     return (
-        <Grid padding='4px 16px' border='solid 5px #666' is_flex>
-            <Grid>
-                <Text cursor='pointer' bold size='40px' >YAM</Text>
+        <Grid padding='4px 16px' border='solid 5px #666' is_flex is_between>
+            <Grid >
+            <Text _onClick={()=>{history.push('/')}} bold size='40px' >YAM</Text>
             </Grid>
             <Grid width='auto' margin='0 5px 0 5px'>
                 <Button _onClick={()=>{history.push('/sign/in')}} border='solid 1px #000' bg='#fff' width='70px'>로그인</Button>
