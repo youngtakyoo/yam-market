@@ -1,10 +1,12 @@
 import React from "react";
+import { useHistory } from 'react-router-dom';
 
 import { Grid, Input, Text, Button } from "../elements";
 import { Card } from '../components'
 
 const Main = (props) => {
     const [is_login, setLogin] =React.useState(true);
+    const history = useHistory();
 
 
     return (
@@ -13,7 +15,7 @@ const Main = (props) => {
            <Card/>
            <Card/>
            <Card/>
-           {is_login && <Button is_float>+</Button>}
+           {is_login && <Button _onClick={()=>{history.push('/write')}} is_float>+</Button>}
         </Grid>
     )
 }

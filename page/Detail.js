@@ -1,10 +1,13 @@
 import React from "react";
 
+import { Post, CommentList } from '../components';
+ 
 const Detail = (props) => {
 
     return (
         <React.Fragment>
-            메인페이지입니다.
+            <Post />
+            <CommentList />
         </React.Fragment>
     )
 }
