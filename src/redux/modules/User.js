@@ -8,11 +8,13 @@ import { setCookie, deleteCookie } from '../../shared/Cookie'
 const LOG_IN = 'LOG_IN';
 const LOG_OUT = 'LOG_OUT';
 const BOOKING = 'BOOKING';
+const SET_ISLOGIN = 'SET_ISLOGIN';
 
 // actioncreators
-const logIn = createAction(LOG_IN,(id,nick,book)=>({id,nick,book}));
+const logIn = createAction(LOG_IN,(id,nick)=>({id,nick}));
 const logOut = createAction(LOG_OUT,()=>({}));
 const booking = createAction(BOOKING,(post_id)=>({post_id}));
+const setIslogin = createAction(SET_ISLOGIN,()=>({}));
 
 // initialstate
 const initialState ={
@@ -30,26 +32,13 @@ const initialState ={
 const testingDB = () =>{
     return function(dispatch,getState,{history}){
         
-        apis.test()
+        apis.test2()
         .then(res => {
             let msg = res.data.msg
+            console.log(msg)
             const cookie = document.cookie.split('=')[1];
-            console.log(cookie)
         })
         .catch(err=> {console.log(err)})
-    }
-}
-
-
-// 로그인 기능 : 미완(setUser까지 가야함 필요-logincheck);
-const loginDB = (id,pwd) => {
-    return function(dispatch){
-        
-        apis.login(id,pwd).then((res)=>{
-            setCookie('token', res.data.token, 3);
-        }).catch(err=>{
-            console.log('err',err)
-        })
     }
 }
 
@@ -59,27 +48,44 @@ const singupDB = (id, nick, pwd) => {
         
         apis.signup(id, nick, pwd).then(()=>{
             window.alert('회원가입 완료!!');
-            history.replace('/sign/in')
+            history.replace('/sign/in');
         }).catch(err=>{console.log('err',err)})
+    }
+}
+
+// 로그인 기능 : 미완(logIn까지 가야함 필요-logincheck 또는 id,nick받아오기);
+const loginDB = (id,pwd) => {
+    return function(dispatch, getState, {history}){
+        
+        apis.login(id,pwd).then((res)=>{
+            setCookie('token', res.data.token, 3);
+            dispatch(setIslogin());
+            history.replace('/')
+        }).catch(err=>{
+            console.log('err',err)
+        })
+        
     }
 }
 
 // 로그인 체크 기능 : 미완
 const logincheckDB = () => {
     return function(dispatch, getState, {history}){
-        let token = document.cookie.split('=')[1]
-        // console.log(token);
-        // if(token){
-        //     apis.usercheck(token)
-        //     .then(res => {
-        //         console.log(res.data)
-        //     })
-        //     .catch(err=>{
-        //         console.log('error:',err);
-        //     })
-        // }else{
-        //     dispatch(logOut())
-        // }
+        let token = document.cookie
+       
+        if(token){
+            apis.usercheck()
+            .then(res => {
+                let id = res.data.userId;
+                let nick = res.data.nickname;
+                dispatch(logIn(id, nick));
+            })
+            .catch(err=>{
+                console.log('error:',err);
+            })
+        }else{
+            dispatch(logOut())
+        }
         
     }
 }
@@ -87,22 +93,24 @@ const logincheckDB = () => {
 // reducer
 export default handleActions({
     [LOG_IN]:(state,action) => produce(state,(draft)=>{
-        // draft.user_id = action.payload.id
-        // draft.nick_name = action.payload.nick
-        // draft.bookmark = action.payload.book
+        draft.user_info.user_id = action.payload.id
+        draft.user_info.nick_name = action.payload.nick
         draft.is_login = true;
     }),
     [LOG_OUT]:(state,action) => produce(state,(draft)=>{
-        draft.user_info = {user_id: 'notId',nick_name:'nick'}
+        draft.user_info = {user_id: 'notId',nick_name:'nick',bookmark:[]};
         deleteCookie('token');
         draft.is_login = false;
     }),
     [BOOKING]:(state,action) => produce(state,(draft)=>{
         if(draft.user_info.bookmark.includes(action.payload.post_id)){
-            draft.user_info.bookmark = draft.bookmark.filter(b => b !== action.payload.post_id)
+            draft.user_info.bookmark = draft.user_info.bookmark.filter(b => b !== action.payload.post_id)
         }else{
             draft.user_info.bookmark.push(action.payload.post_id)
         }
+    }),
+    [SET_ISLOGIN]:(state,action) => produce(state,(draft)=>{
+        draft.is_login = true;
     }),
 },initialState)
 

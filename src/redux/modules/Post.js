@@ -43,7 +43,7 @@ const setpostDB = () => {
 
       apis.postlist()
       .then(res => {
-        //   console.log('postlist : ',res.data);
+          console.log('postlist : ',res.data);
       })
       .catch(err=>{
           console.log('err',err)

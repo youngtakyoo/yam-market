@@ -14,10 +14,9 @@ const Post = (props) => {
 
     // user_id 가져오기
     const is_login = useSelector(state=> state.user.is_login);
-    let user_id = useSelector(state=>state.user.user_info);
-    user_id = user_id.user_id;
-    let book_list = useSelector(state=>state.user.user_info);
-    book_list = book_list.bookmark;
+    const user_info = useSelector(state=> state.user.user_info);
+    const user_id = user_info.user_id;
+    const book_list = user_info.bookmark;
 
     // post자체의 정보 가져오기 itSelf에 해당 포스트 정보 다 있음
     const post_list = useSelector(state => state.post.post_list);
@@ -26,7 +25,7 @@ const Post = (props) => {
     // 내 포스트인지 확인
     const is_me = itSelf.user_id === user_id ? true : false;
     const is_book = book_list.includes(post_id);
-
+    // let is_book = false
     // 이미지 순서 바꾸기
     const next = () => {
         if(num === itSelf.imageFile.length){

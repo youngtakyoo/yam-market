@@ -10,6 +10,15 @@ const instance = axios.create({
     headers: {
         "content-type": "application/json;charset=UTF-8",
         accept: "application/json,",
+        authorization : token,
+      },
+});
+
+const imstance = axios.create({
+    baseURL: 'http://3.35.133.127',
+    headers: {
+        "content-type": "multipart/form-data",
+        accept: "application/json,",
         'token': token,
       },
 });
@@ -17,6 +26,7 @@ const instance = axios.create({
 export const apis = {
   // test code
   test: () => instance.get('/test'),
+  test2: () => imstance.get('/test'),
 
   // 회원가입용 요청
   signup: (id,nick,pwd) => instance.post('/user/signup',{userId: id, nickname: nick, password: pwd}),
@@ -25,7 +35,7 @@ export const apis = {
   login: (id,pwd) => instance.post('/user/login',{userId: id,password: pwd}),
 
   // 로그인 체크
-  usercheck: (token) => instance.post('/user/check',{authorization: token}),
+  usercheck: () => instance.post('/user/check'),
 
   // 로그아웃 요청
   logout: ()=> instance.post('/user/logout'),

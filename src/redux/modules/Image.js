@@ -20,8 +20,14 @@ const initialState ={
 
 export default handleActions({
     [SET_PREVIEW]:(state,action) => produce(state,(draft)=>{
-        draft.files = [...draft.files, action.payload.file]
+        const file = new FormData();
+        file.append('image',action.payload.file);
+        draft.files = [...draft.files, file];
+
         draft.preview = [ ...draft.preview, action.payload.preview ]
+        
+        console.log(draft.files);
+        
         if(draft.preview.length === 3){ draft.uploading = true }
     }),
     [EDIT_PREVIEW]: (state,action) => produce(state,(draft)=>{
