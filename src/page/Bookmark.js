@@ -9,8 +9,8 @@ import { Mark, Forbidden } from '../components'
 
 const Bookmark = (props) => {
     const is_login = useSelector((state)=> state.user.is_login);
-    const my_list = useSelector ((state)=> state.user.bookmark);
-
+    let my_list = useSelector ((state)=> state.user.user_info);
+    my_list = my_list.bookmark;
     console.log(my_list);
 
     if(!is_login){

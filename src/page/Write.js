@@ -75,21 +75,21 @@ const Write = (props) => {
                         <Upload />
                         <Image src={preview[0] ? preview[0] : "http://via.placeholder.com/400x300"} />
                         { length > 0 &&
-                        <Button _onClick={()=>{dispatch(imgActions.delPreview(preview[0]))}} bg='#fff' >삭제</Button>}
+                        <Button _onClick={()=>{dispatch(imgActions.delPreview(0))}} bg='#fff' >삭제</Button>}
                     </Grid>
                     { length > 0 && 
                     <Grid width='60%' border padding='5px' is_flex is_column>    
                         <Upload />
                         <Image src={preview[1] ? preview[1] : "http://via.placeholder.com/400x300" } />
                         { length > 1 &&
-                        <Button _onClick={()=>{dispatch(imgActions.delPreview(preview[1]))}} bg='#fff' >삭제</Button>}
+                        <Button _onClick={()=>{dispatch(imgActions.delPreview(1))}} bg='#fff' >삭제</Button>}
                     </Grid>}
                     { length > 1 && 
                     <Grid width='60%' border padding='5px' is_flex is_column>    
                         <Upload />
                         <Image src={preview[2] ? preview[2] : "http://via.placeholder.com/400x300" }/>
                         { length > 2 &&
-                        <Button _onClick={()=>{dispatch(imgActions.delPreview(preview[2]))}} bg='#fff' >삭제</Button>}
+                        <Button _onClick={()=>{dispatch(imgActions.delPreview(2))}} bg='#fff' >삭제</Button>}
                     </Grid>}
                 </Grid>
             </Grid>

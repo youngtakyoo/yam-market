@@ -14,8 +14,10 @@ const Post = (props) => {
 
     // user_id 가져오기
     const is_login = useSelector(state=> state.user.is_login);
-    const user_id = useSelector(state=>state.user.user_id);
-    const book_list = useSelector(state=>state.user.bookmark);
+    let user_id = useSelector(state=>state.user.user_info);
+    user_id = user_id.user_id;
+    let book_list = useSelector(state=>state.user.user_info);
+    book_list = book_list.bookmark;
 
     // post자체의 정보 가져오기 itSelf에 해당 포스트 정보 다 있음
     const post_list = useSelector(state => state.post.post_list);

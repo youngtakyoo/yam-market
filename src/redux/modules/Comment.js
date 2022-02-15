@@ -1,7 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 import { produce } from 'immer';
 
-import instance from '../../shared/axios';
+
 
 const SET_COMMENT = 'SET_COMMENT';
 const ADD_COMMENT = 'ADD_COMMENT';
@@ -30,7 +30,7 @@ const initialState ={
         {
             id:'1dfh53z',
             user_id: 'asd@asd.com',
-            comment: '참고로 5만원 이하로도 가능합니다.',
+            comment: '참고로 5천원 이하로도 가능합니다.',
             date: '2022-03-03 11:00:17',
         },
     ]
@@ -40,25 +40,14 @@ const initialState ={
 const getcommentDB = (post_id) => {
     // return function(dispatch, getState, {history}){
 
-    //     instance.get(`/comments/${post_id}`)
-    //     .then(res=>{
-    //         console.log(res.data);
-    //         dispatch(setComment())
-    //     })
-    //     .catch(err=>{console.log('err',err)})
+    
     // }
 }
 
 const addcommentDB = (comment,post_id) => {
     return function(dispatch, getState, {history}){
 
-        instance.post(`/comment/${post_id}`,{comment: comment})
-        .then(res => {
-            console.log(res.data)
-        })
-        .catch(err => {
-            console.log('err',err)
-        })
+        
     }
 }
 
