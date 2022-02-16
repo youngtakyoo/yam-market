@@ -11,7 +11,8 @@ const Comment = (props) => {
     const [is_edit, Change] = React.useState(false); 
 
     const dispatch = useDispatch();
-    const _user_id = useSelector(state => state.user.user_id);
+    let _user_id = useSelector(state => state.user.user_info);
+    _user_id = _user_id.user_id;
 
     const is_me = user_id === _user_id ? true : false
 

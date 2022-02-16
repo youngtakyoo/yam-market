@@ -1,7 +1,8 @@
 import { createAction, handleActions } from 'redux-actions';
 import { produce } from 'immer';
 
-import instance from '../../shared/axios';
+import { apis } from '../../shared/axios';
+import axios from 'axios';
 
 const ADD_POST = 'ADD_POST'
 const EDIT_POST = 'EDIT_POST'
@@ -41,46 +42,47 @@ const initialState = {
 const setpostDB = () => {
     return function(dispatch, getState, {history}){
 
-        // instance.get('/views/postList')
-        // .then(res=>{
-        //     console.log(res.data);
-        // })
-        // .catch(err=>{console.log('err',err)})
+      apis.postlist()
+      .then(res => {
+          console.log('postlist : ',res.data);
+      })
+      .catch(err=>{
+          console.log('err',err)
+      })
     }
 }
 
 const addpostDB = (post) => {
-
-    // post는 post에 들어가는 내용을 담은 객체
-
-    // return function(dispatch, getState, {history}){
-    //     instance.post('/posts/write',{title: post.title, desc: post.desc, imageFile: post.imageFile})
-    //     .then(res => {
-    //         console.log(res.data);
-    //     })
-    //     .catch(err => {console.log('err',err)})
-    // }
+    return function(dispatch, getState, {history}){
+        // formdata 가공
+        const formdata = new FormData();
+        let file = getState().image.files[0];
+        formdata.append('file',file);
+        console.log(post);
+        formdata.append('post',new Blob([JSON.stringify(post)],{'type':'application/json'}));
+        // axios.posting 요청
+        apis.posting(formdata)
+        .then(()=>{
+            dispatch(setpostDB());
+            history.replace('/')
+        })
+        .catch(err=>{
+            console.log('err',err)
+        })
+    }
 }
 
 const editpostDB = (post) => {
     // post는 post에 들어가는 내용을 담은 객체
 
     // return function(dispatch, getState, {history}){
-    //     instance.patch(`/posts/${post.post_id}`,{post_id: post.post_id, title: post.title, desc: post.desc, imageFile: post.imageFile})
-    //     .then(res=>{
-    //         console.log(res.data)
-    //     })
-    //     .catch(err=>{console.log('err',err)})
+
     // }
 }
 
 const delpostDB = (post_id) => {
     // return function(dispatch, getState, {history}){
-    //     instance.delete(`/posts/${post_id}`)
-    //     .then(res => {
-    //         console.log(res.data)
-    //     })
-    //     .catch(err=> {console.log('err',err)})
+
     // }
 }
 

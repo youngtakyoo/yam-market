@@ -2,7 +2,7 @@ import React from "react";
 import { history } from "../redux/configureStore";
 import { useSelector } from 'react-redux';
 
-import { Grid, Input, Text, Button } from "../elements";
+import { Grid, Text, Button } from "../elements";
 import { Card } from '../components'
 
 const Main = (props) => {

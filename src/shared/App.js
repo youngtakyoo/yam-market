@@ -4,17 +4,26 @@ import { Route } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router'
 import { history } from '../redux/configureStore';
 
-import { useDispatch } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
+import { actionCreators as userActions } from '../redux/modules/User';
 import { actionCreators as postActions } from '../redux/modules/Post';
 
 import { Header } from '../components'
 import { Grid } from '../elements';
-import { Main, Sign, Detail, Write, Bookmark, Test } from '../page';
+import { Main, Sign, Detail, Write, Bookmark } from '../page';
 
 function App() {
   const dispatch = useDispatch();
+  const is_login = useSelector(state => state.user.is_login);
+
+  const user_info = useSelector(state => state.user.user_info);
+  console.log(user_info);
+
   React.useEffect(()=>{
+    
+    dispatch(userActions.logincheckDB());
     dispatch(postActions.setpostDB());
+
   },[])
 
 
@@ -29,7 +38,6 @@ function App() {
             <Route path='/write' exact component={Write} />
             <Route path='/write/:post_id' exact component={Write} />
             <Route path='/bookmark' exact component={Bookmark} />
-            <Route path='/test' exact component={Test} />
           </Grid>
         </ConnectedRouter>      
     </React.Fragment>
