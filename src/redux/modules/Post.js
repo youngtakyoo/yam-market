@@ -2,6 +2,7 @@ import { createAction, handleActions } from 'redux-actions';
 import { produce } from 'immer';
 
 import { apis } from '../../shared/axios';
+import axios from 'axios';
 
 const ADD_POST = 'ADD_POST'
 const EDIT_POST = 'EDIT_POST'
@@ -52,12 +53,23 @@ const setpostDB = () => {
 }
 
 const addpostDB = (post) => {
-
-    // post는 post에 들어가는 내용을 담은 객체
-
-    // return function(dispatch, getState, {history}){
-
-    // }
+    return function(dispatch, getState, {history}){
+        // formdata 가공
+        const formdata = new FormData();
+        let file = getState().image.files[0];
+        formdata.append('file',file);
+        console.log(post);
+        formdata.append('post',new Blob([JSON.stringify(post)],{'type':'application/json'}));
+        // axios.posting 요청
+        apis.posting(formdata)
+        .then(()=>{
+            dispatch(setpostDB());
+            history.replace('/')
+        })
+        .catch(err=>{
+            console.log('err',err)
+        })
+    }
 }
 
 const editpostDB = (post) => {

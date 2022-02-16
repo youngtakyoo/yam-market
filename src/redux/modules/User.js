@@ -1,20 +1,19 @@
-import { createAction, handleActions } from 'redux-actions'
-import { produce } from 'immer'
+import { createAction, handleActions } from 'redux-actions';
+import { produce } from 'immer';
 
-import {apis} from '../../shared/axios'
-import { setCookie, deleteCookie } from '../../shared/Cookie'
+import {apis} from '../../shared/axios';
+import axios from 'axios';
 
+import { setCookie, deleteCookie } from '../../shared/Cookie';
 // action
 const LOG_IN = 'LOG_IN';
 const LOG_OUT = 'LOG_OUT';
 const BOOKING = 'BOOKING';
-const SET_ISLOGIN = 'SET_ISLOGIN';
 
 // actioncreators
 const logIn = createAction(LOG_IN,(id,nick)=>({id,nick}));
 const logOut = createAction(LOG_OUT,()=>({}));
 const booking = createAction(BOOKING,(post_id)=>({post_id}));
-const setIslogin = createAction(SET_ISLOGIN,()=>({}));
 
 // initialstate
 const initialState ={
@@ -28,39 +27,38 @@ const initialState ={
 
 // middlwares
 
-// test code
-const testingDB = () =>{
-    return function(dispatch,getState,{history}){
-        
-        apis.test2()
-        .then(res => {
-            let msg = res.data.msg
-            console.log(msg)
-            const cookie = document.cookie.split('=')[1];
-        })
-        .catch(err=> {console.log(err)})
-    }
-}
-
 // 회원가입 기능 : 완성
 const singupDB = (id, nick, pwd) => {
     return function(dispatch, getState, {history}){
         
         apis.signup(id, nick, pwd).then(()=>{
             window.alert('회원가입 완료!!');
+            dispatch(logincheckDB());
             history.replace('/sign/in');
         }).catch(err=>{console.log('err',err)})
     }
 }
 
-// 로그인 기능 : 미완(logIn까지 가야함 필요-logincheck 또는 id,nick받아오기);
+// 로그인 기능 : 완성(22.02.16 11:51:37);
 const loginDB = (id,pwd) => {
     return function(dispatch, getState, {history}){
         
         apis.login(id,pwd).then((res)=>{
             setCookie('token', res.data.token, 3);
-            dispatch(setIslogin());
-            history.replace('/')
+            axios.post('http://3.35.133.127/user/check',{},{
+                headers:{
+                    "content-type": "application/json;charset=UTF-8",
+                    accept: "application/json,",
+                    Authorization: res.data.token,
+                }})
+            .then(res=>{
+                let id = res.data.userId;
+                let nick = res.data.nickname;
+                console.log(id,nick)
+                dispatch(logIn(id, nick));
+                history.replace('/')
+            })
+            .catch(err=>{console.log('err',err)})
         }).catch(err=>{
             console.log('err',err)
         })
@@ -68,10 +66,10 @@ const loginDB = (id,pwd) => {
     }
 }
 
-// 로그인 체크 기능 : 미완
+// 로그인 체크 기능 : 완성(22.02.15);
 const logincheckDB = () => {
     return function(dispatch, getState, {history}){
-        let token = document.cookie
+        let token = document.cookie.split('=')[1];
        
         if(token){
             apis.usercheck()
@@ -109,16 +107,12 @@ export default handleActions({
             draft.user_info.bookmark.push(action.payload.post_id)
         }
     }),
-    [SET_ISLOGIN]:(state,action) => produce(state,(draft)=>{
-        draft.is_login = true;
-    }),
 },initialState)
 
 const actionCreators = {
     logIn,
     logOut,
     booking,
-    testingDB,
     loginDB,
     singupDB,
     logincheckDB,

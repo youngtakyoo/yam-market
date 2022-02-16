@@ -17,6 +17,7 @@ const Write = (props) => {
     const post_list = useSelector(state => state.post.post_list);
     const post = post_list.filter(p => p.post_id === props.match.params.post_id)[0];
     const preview = useSelector(state=> state.image.preview);
+    const files = useSelector(state=> state.image.files);
 
     React.useEffect(()=>{
         if(is_edit && preview.length === 0){
@@ -39,18 +40,18 @@ const Write = (props) => {
     const [_desc,setDesc] = React.useState(!is_edit?'':post.desc);
 
     const posting = () => {
-        if(_title.length === 0 || _desc.length === 0 || preview.length === 0){
+        if(_title.length === 0 || _desc.length === 0 || files.length === 0){
             window.alert('내용이 빈곳이 있습니다.')
             return
         }
 
         if(is_edit){
-            dispatch(postActions.editPost({title:_title,desc:_desc},props.match.params.post_id))
+            dispatch(postActions.editPost({desc:_desc,title:_title},props.match.params.post_id))
             history.replace('/');
             return;
         }
 
-        dispatch(postActions.addPost({title:_title,desc:_desc}))
+        dispatch(postActions.addpostDB({title:_title, postDesc:_desc}))
         history.replace('/');
     }
 
@@ -77,7 +78,7 @@ const Write = (props) => {
                         { length > 0 &&
                         <Button _onClick={()=>{dispatch(imgActions.delPreview(0))}} bg='#fff' >삭제</Button>}
                     </Grid>
-                    { length > 0 && 
+                    {/* { length > 0 && 
                     <Grid width='60%' border padding='5px' is_flex is_column>    
                         <Upload />
                         <Image src={preview[1] ? preview[1] : "http://via.placeholder.com/400x300" } />
@@ -90,7 +91,7 @@ const Write = (props) => {
                         <Image src={preview[2] ? preview[2] : "http://via.placeholder.com/400x300" }/>
                         { length > 2 &&
                         <Button _onClick={()=>{dispatch(imgActions.delPreview(2))}} bg='#fff' >삭제</Button>}
-                    </Grid>}
+                    </Grid>} */}
                 </Grid>
             </Grid>
             <Grid padding='10px' is_flex is_column>
@@ -101,10 +102,6 @@ const Write = (props) => {
             </Grid>
         </Grid>
     )
-}
-
-Write.defaultProps = {
-    src: '',
 }
 
 export default Write;

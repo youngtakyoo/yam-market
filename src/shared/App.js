@@ -10,7 +10,7 @@ import { actionCreators as postActions } from '../redux/modules/Post';
 
 import { Header } from '../components'
 import { Grid } from '../elements';
-import { Main, Sign, Detail, Write, Bookmark, Test } from '../page';
+import { Main, Sign, Detail, Write, Bookmark } from '../page';
 
 function App() {
   const dispatch = useDispatch();
@@ -20,9 +20,8 @@ function App() {
   console.log(user_info);
 
   React.useEffect(()=>{
-    if (is_login) {
-      dispatch(userActions.logincheckDB());
-    }
+    
+    dispatch(userActions.logincheckDB());
     dispatch(postActions.setpostDB());
 
   },[])
@@ -39,7 +38,6 @@ function App() {
             <Route path='/write' exact component={Write} />
             <Route path='/write/:post_id' exact component={Write} />
             <Route path='/bookmark' exact component={Bookmark} />
-            <Route path='/test' exact component={Test} />
           </Grid>
         </ConnectedRouter>      
     </React.Fragment>

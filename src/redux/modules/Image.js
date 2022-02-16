@@ -20,9 +20,8 @@ const initialState ={
 
 export default handleActions({
     [SET_PREVIEW]:(state,action) => produce(state,(draft)=>{
-        const file = new FormData();
-        file.append('image',action.payload.file);
-        draft.files = [...draft.files, file];
+        
+        draft.files = [...draft.files, action.payload.file];
 
         draft.preview = [ ...draft.preview, action.payload.preview ]
         
@@ -40,6 +39,7 @@ export default handleActions({
         draft.uploading = false;
     }),
     [INIT_PREVIEW]:(state,action) => produce(state,(draft)=>{
+        draft.files = [];
         draft.preview = [];
         draft.uploading = false
     }),
