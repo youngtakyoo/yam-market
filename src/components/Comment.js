@@ -6,7 +6,7 @@ import { actionCreators as comActions } from "../redux/modules/Comment";
 import { Grid, Text, Button, Input } from '../elements'
 
 const Comment = (props) => {
-    const {user_id, comment} = props;
+    const {userId, comment, id, postId} = props;
     const [edit_com , Edit] = React.useState(comment)
     const [is_edit, Change] = React.useState(false); 
 
@@ -14,7 +14,7 @@ const Comment = (props) => {
     let _user_id = useSelector(state => state.user.user_info);
     _user_id = _user_id.user_id;
 
-    const is_me = user_id === _user_id ? true : false
+    const is_me = userId === _user_id ? true : false
 
     const edit = () =>{Change(!is_edit)};
     const editCom = () =>{
@@ -22,18 +22,18 @@ const Comment = (props) => {
             window.alert('내용이 없으면 변경할 수 없습니다.')
             return
         }
-        dispatch(comActions.editCommnet(edit_com,props.id));
+        dispatch(comActions.editcommentDB(edit_com,id,postId));
         Change(false);
     }
 
     const delCom = () => {
-        dispatch(comActions.delCommnet(props.id))
+        dispatch(comActions.delcommentDB(id,postId));
     } 
 
     if(is_edit){
         return(
             <Grid padding='8px' is_between>
-                <Text size='12px' bold>{user_id}</Text>
+                <Text size='12px' bold>{userId}</Text>
                 <Grid padding='0 24px' width='150%' >
                     <Input _onChange={(e)=>{Edit(e.target.value)}} value={edit_com} non_label placeholder='수정할 내용을 넣어주세요' />
                 </Grid>
@@ -47,7 +47,7 @@ const Comment = (props) => {
 
     return(
         <Grid padding='8px' is_between>
-            <Text size='12px' bold>{user_id}</Text>
+            <Text size='12px' bold>{userId}</Text>
             <Text size='12px' >{comment}</Text>
             {is_me &&
             <Grid is_flex width='auto'>

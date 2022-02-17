@@ -15,15 +15,13 @@ const Write = (props) => {
     // 편집여부 체크
     const is_edit = props.match.params.post_id ? true : false;
     const post_list = useSelector(state => state.post.post_list);
-    const post = post_list.filter(p => p.post_id === props.match.params.post_id)[0];
+    const post = post_list.filter(p => p.id === props.match.params.post_id)[0];
     const preview = useSelector(state=> state.image.preview);
     const files = useSelector(state=> state.image.files);
 
     React.useEffect(()=>{
         if(is_edit && preview.length === 0){
-            let pre = post.imageFile.map(p => {
-                return p.image_path
-            })
+            let pre = post?.filePath
             dispatch(imgActions.editPreview(pre));
         }
         if(!is_edit){
@@ -36,8 +34,8 @@ const Write = (props) => {
     
 
     // 작성 기능
-    const [_title,setTitle] = React.useState(!is_edit?'':post.title);
-    const [_desc,setDesc] = React.useState(!is_edit?'':post.desc);
+    const [_title,setTitle] = React.useState(!is_edit?'':post?.title);
+    const [_desc,setDesc] = React.useState(!is_edit?'':post?.postDesc);
 
     const posting = () => {
         if(_title.length === 0 || _desc.length === 0 || files.length === 0){

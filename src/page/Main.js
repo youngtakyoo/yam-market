@@ -16,7 +16,7 @@ const Main = (props) => {
             </Grid>
                 {post_list.map((p)=>{
                     return(
-                        <Card {...p} key={p.post_id} />
+                        <Card {...p} key={p.id} />
                     )
                 })}
            {is_login && <Button _onClick={()=>{history.push('/write')}} is_float>+</Button>}

@@ -10,7 +10,11 @@ const Post = (props) => {
     const { post_id } = props;
     const dispatch = useDispatch();
     const history = useHistory();
-    const [num,setNum] =React.useState(1);
+    React.useEffect(()=>{
+        if(is_login){
+            dispatch(userActions.setBookDB());
+        }
+    },[])
 
     // user_id 가져오기
     const is_login = useSelector(state=> state.user.is_login);
@@ -20,33 +24,37 @@ const Post = (props) => {
 
     // post자체의 정보 가져오기 itSelf에 해당 포스트 정보 다 있음
     const post_list = useSelector(state => state.post.post_list);
-    const itSelf= post_list.filter((p)=> post_id === p.post_id)[0];
+    const itSelf= post_list.filter((p)=> Number(post_id) === p.id)[0];
 
     // 내 포스트인지 확인
-    const is_me = itSelf.user_id === user_id ? true : false;
-    const is_book = book_list.includes(post_id);
+    const is_me = itSelf?.userId === user_id ? true : false;
+    const is_book = book_list.includes(Number(post_id));
     // let is_book = false
     // 이미지 순서 바꾸기
-    const next = () => {
-        if(num === itSelf.imageFile.length){
-            window.alert('다음 이미지가 없습니다.')
-            return
-        }
-        setNum(num + 1)
-    }
-    const prev = () => {
-        if(num === 1){
-            window.alert('이전 이미지가 없습니다.')
-            return
-        }
-        setNum(num - 1)
-    }
+    // const next = () => {
+    //     if(num === itSelf.imageFile.length){
+    //         window.alert('다음 이미지가 없습니다.')
+    //         return
+    //     }
+    //     setNum(num + 1)
+    // }
+    // const prev = () => {
+    //     if(num === 1){
+    //         window.alert('이전 이미지가 없습니다.')
+    //         return
+    //     }
+    //     setNum(num - 1)
+    // }
     // bookmark기능
     const boOk = () => {
-        dispatch(userActions.booking(post_id));
+        if(!is_book){
+            dispatch(userActions.addBookDB(post_id));
+        }else{
+            dispatch(userActions.delBookDB(post_id));
+        }
     }
     const del = () => {
-        dispatch(postActions.delPost(post_id))
+        dispatch(postActions.delpostDB(post_id))
         history.replace('/');
     }
     
@@ -54,13 +62,14 @@ const Post = (props) => {
     return(
         <Grid border width='80%' is_flex is_column margin='16px auto 8px' >
             <Grid padding='8px' is_between>
-                <Text size='16px' >{itSelf.user_id}</Text>  
-                <Text bold >{itSelf.title}</Text>
-                <Text size='16px' >{itSelf.date}</Text>
+                <Text size='16px' >{itSelf?.userId}</Text>  
+                <Text bold >{itSelf?.title}</Text>
+                <Text size='16px' >{itSelf?.createdAt}</Text>
             </Grid>
             <Grid is_flex>
                 <Grid width='100%' padding="10px">
-                    {num === 1 &&
+                    <Image src={itSelf?.filePath}/>
+                    {/* {num === 1 &&
                     <Image src={itSelf.imageFile[0].image_path}/>}
                     {num === 2 &&
                     <Image src={itSelf.imageFile[1].image_path}/>}
@@ -70,10 +79,10 @@ const Post = (props) => {
                     <Grid padding='8px' width='60%' is_between>
                         <Button _onClick={prev} bg='#fff'>이전</Button>
                         <Button _onClick={next} bg='#fff'>다음</Button>
-                    </Grid>}
+                    </Grid>} */}
                 </Grid>
                 <Grid padding='10px' is_flex is_column>
-                    <Text>{itSelf.desc}</Text>
+                    <Text>{itSelf?.postDesc}</Text>
                 </Grid>
             </Grid>
             <Grid padding='0 8px 8px' is_between>

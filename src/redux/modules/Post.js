@@ -4,36 +4,25 @@ import { produce } from 'immer';
 import { apis } from '../../shared/axios';
 import axios from 'axios';
 
-const ADD_POST = 'ADD_POST'
-const EDIT_POST = 'EDIT_POST'
-const DEL_POST = 'DEL_POST'
+const SET_POST = 'SET_POST';
+const ADD_POST = 'ADD_POST';
+const EDIT_POST = 'EDIT_POST';
+const DEL_POST = 'DEL_POST';
 
+const setPost = createAction(SET_POST,(post_list)=>({post_list}));
 const addPost = createAction(ADD_POST,(post)=>({post}));
 const editPost = createAction(EDIT_POST,(post,id)=>({post,id}));
-const delPost = createAction(DEL_POST,(id)=>({id}))
+const delPost = createAction(DEL_POST,(id)=>({id}));
 
 const initialState = {
     post_list: [
         {
-            post_id: 'nong-bu-boots',
-            user_id: 'asd@asd.com',
+            id: 'nong-bu-boots',
+            userId: 'asd@asd.com',
             title: '새 것같은 가죽 장화.',
-            desc: '정말 새것같은 장화입니다. 급처해요.',
-            date: '2022-03-03 10:20:30',
-            imageFile: [
-                {
-                    id: '',
-                    image_name: '',
-                    image_path: 'https://shop2.daumcdn.net/thumb/R500x500/?fname=http%3A%2F%2Fshop2.daumcdn.net%2Fshophow%2Fp%2FM6586458865.jpg%3Fut%3D20200111104607',
-                    image_size: ''
-                },
-                {
-                    id: '',
-                    image_name: '',
-                    image_path: 'https://shop1.daumcdn.net/thumb/R500x500/?fname=http%3A%2F%2Fshop1.daumcdn.net%2Fshophow%2Fp%2FS6587605644.jpg%3Fut%3D20200111141141',
-                    image_size: ''
-                },
-            ]
+            postDesc: '정말 새것같은 장화입니다. 급처해요.',
+            createdAt: '2022-03-03 10:20:30',
+            filePath: 'https://shop2.daumcdn.net/thumb/R500x500/?fname=http%3A%2F%2Fshop2.daumcdn.net%2Fshophow%2Fp%2FM6586458865.jpg%3Fut%3D20200111104607'
         },
     ]
 }
@@ -44,7 +33,7 @@ const setpostDB = () => {
 
       apis.postlist()
       .then(res => {
-          console.log('postlist : ',res.data);
+          dispatch(setPost(res.data))
       })
       .catch(err=>{
           console.log('err',err)
@@ -58,7 +47,6 @@ const addpostDB = (post) => {
         const formdata = new FormData();
         let file = getState().image.files[0];
         formdata.append('file',file);
-        console.log(post);
         formdata.append('post',new Blob([JSON.stringify(post)],{'type':'application/json'}));
         // axios.posting 요청
         apis.posting(formdata)
@@ -81,37 +69,21 @@ const editpostDB = (post) => {
 }
 
 const delpostDB = (post_id) => {
-    // return function(dispatch, getState, {history}){
-
-    // }
+    return function(dispatch, getState, {history}){
+        apis.deleting(post_id)
+        .then(()=>{
+            dispatch(setpostDB())
+        })
+        .catch(err=>{
+            console.log('err',err)
+        })
+    }
 }
 
 
 export default handleActions({
-    [ADD_POST]:(state,action)=>produce(state,(draft)=>{
-        const _post = action.payload.post
-        let new_post = {
-            post_id: 'asklf56',
-            user_id: 'asd@asd.com',
-            title: _post.title,
-            desc: _post.desc,
-            date: '2022-03-03 10:20:30',
-            imageFile: [
-                {
-                    id: '',
-                    image_name: '',
-                    image_path: '',
-                    image_size: ''
-                },
-                {
-                    id: '',
-                    image_name: '',
-                    image_path: '',
-                    image_size: ''
-                },
-            ]
-        }
-        draft.post_list.push(new_post);
+    [SET_POST]:(state,action)=>produce(state,(draft)=>{
+        draft.post_list = action.payload.post_list;
     }),
     [EDIT_POST]:(state,action)=>produce(state,(draft)=>{
         console.log('edit')
@@ -126,7 +98,6 @@ export default handleActions({
 },initialState)
 
 const actionCreators = {
-    addPost,
     editPost,
     delPost,
     setpostDB,

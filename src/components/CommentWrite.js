@@ -17,8 +17,9 @@ const CommentWrite = (props) => {
             window.alert('내용이 없습니다.')
             return
         }
-        // dispatch(comActions.addCommnet(com,post_id));
-        dispatch(comActions.addCommnet(com,user_id));
+        dispatch(comActions.addcommentDB(com,post_id));
+        setCom('');
+        // dispatch(comActions.addCommnet(com,user_id));
     }
 
     return (
