@@ -1,6 +1,7 @@
 import React from "react";
 
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
+import { actionCreators as userActions } from "../redux/modules/User";
 import { history } from "../redux/configureStore";
 
 import { Grid, Text, Button } from '../elements'
@@ -9,9 +10,16 @@ import { Mark, Forbidden } from '../components'
 
 const Bookmark = (props) => {
     const is_login = useSelector((state)=> state.user.is_login);
+    const dispatch = useDispatch();
+    
+    React.useEffect(()=>{
+        if(is_login){
+            dispatch(userActions.setBookDB());
+        }
+    },[])
+
     let my_list = useSelector ((state)=> state.user.user_info);
     my_list = my_list.bookmark;
-    console.log(my_list);
 
     if(!is_login){
         return(

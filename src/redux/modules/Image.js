@@ -25,12 +25,10 @@ export default handleActions({
 
         draft.preview = [ ...draft.preview, action.payload.preview ]
         
-        console.log(draft.files);
-        
         if(draft.preview.length === 3){ draft.uploading = true }
     }),
     [EDIT_PREVIEW]: (state,action) => produce(state,(draft)=>{
-        draft.preview = action.payload.preview
+        draft.preview = [action.payload.preview]
     }),
     [DEL_PREVIEW]:(state,action) => produce(state,(draft)=>{
         const index = Number(action.payload.num);

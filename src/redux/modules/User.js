@@ -8,11 +8,13 @@ import { setCookie, deleteCookie } from '../../shared/Cookie';
 // action
 const LOG_IN = 'LOG_IN';
 const LOG_OUT = 'LOG_OUT';
+const SET_BOOK = 'SET_BOOK';
 const BOOKING = 'BOOKING';
 
 // actioncreators
 const logIn = createAction(LOG_IN,(id,nick)=>({id,nick}));
 const logOut = createAction(LOG_OUT,()=>({}));
+const setBook = createAction(SET_BOOK,(list)=>({list}));
 const booking = createAction(BOOKING,(post_id)=>({post_id}));
 
 // initialstate
@@ -54,7 +56,6 @@ const loginDB = (id,pwd) => {
             .then(res=>{
                 let id = res.data.userId;
                 let nick = res.data.nickname;
-                console.log(id,nick)
                 dispatch(logIn(id, nick));
                 history.replace('/')
             })
@@ -88,6 +89,42 @@ const logincheckDB = () => {
     }
 }
 
+const setBookDB = () => {
+    return function(dispatch, getState, {history}){
+        apis.getbook()
+        .then(res => {
+            console.log(res.data);
+            dispatch(setBook(res.data));
+        })
+        .catch(err => {
+            console.log('err',err)
+        })
+    }
+}
+
+const delBookDB = (postId) => {
+    return function(dispatch, getState, {history}){
+        apis.delbook(postId).then(()=>{
+            dispatch(setBookDB())
+        })
+        .catch(err=>{
+            console.log('err',err)
+        })
+    }
+}
+
+const addBookDB = (postId) => {
+    return function(dispatch, getState, {history}){
+        apis.addbook(postId)
+        .then(()=>{
+            dispatch(setBookDB());
+        })
+        .catch(err=>{
+            console.log('err',err)
+        })
+    }
+}
+
 // reducer
 export default handleActions({
     [LOG_IN]:(state,action) => produce(state,(draft)=>{
@@ -99,6 +136,9 @@ export default handleActions({
         draft.user_info = {user_id: 'notId',nick_name:'nick',bookmark:[]};
         deleteCookie('token');
         draft.is_login = false;
+    }),
+    [SET_BOOK]:(state,action) => produce(state,(draft)=>{
+        draft.user_info.bookmark = [...action.payload.list];
     }),
     [BOOKING]:(state,action) => produce(state,(draft)=>{
         if(draft.user_info.bookmark.includes(action.payload.post_id)){
@@ -116,6 +156,9 @@ const actionCreators = {
     loginDB,
     singupDB,
     logincheckDB,
+    setBookDB,
+    addBookDB,
+    delBookDB,
 }
 
 export {actionCreators};

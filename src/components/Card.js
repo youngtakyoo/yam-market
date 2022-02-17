@@ -4,16 +4,16 @@ import { Grid, Text, Image } from '../elements'
 import { useHistory } from "react-router-dom";
 
 const Card = (props) => {
-    const { title, post_id, user_id, date } = props;
+    const { title, id, userId, createdAt } = props;
     const history = useHistory();
 
     return (
-        <Grid _onClick={()=>{history.push(`/detail/${post_id}`)}} is_float radius='3px' margin='10px' border width='30%' padding='2px' is_flex is_column>
+        <Grid _onClick={()=>{history.push(`/detail/${id}`)}} is_float radius='3px' margin='10px' border width='30%' padding='2px' is_flex is_column>
             <Grid is_between>
-                <Text size='12px'>{user_id}</Text>
-                <Text size='12px'>{date}</Text>
+                <Text size='12px'>{userId}</Text>
+                <Text size='12px'>{createdAt}</Text>
             </Grid>
-            <Image src={props.imageFile[0].image_path}/>
+            <Image src={props.filePath}/>
             <Text bold size='16px'>{title}</Text>
         </Grid>
     )

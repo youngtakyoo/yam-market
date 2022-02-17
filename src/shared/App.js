@@ -17,7 +17,6 @@ function App() {
   const is_login = useSelector(state => state.user.is_login);
 
   const user_info = useSelector(state => state.user.user_info);
-  console.log(user_info);
 
   React.useEffect(()=>{
     

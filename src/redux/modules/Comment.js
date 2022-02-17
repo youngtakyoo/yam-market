@@ -1,7 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 import { produce } from 'immer';
 
-
+import { apis } from '../../shared/axios';
 
 const SET_COMMENT = 'SET_COMMENT';
 const ADD_COMMENT = 'ADD_COMMENT';
@@ -17,19 +17,19 @@ const initialState ={
     comment_list:[
         {   
             id: '5fas4f5',
-            user_id: 'dosinam',
+            userId: 'dosinam',
             comment: '오 좋은 장화네요 저 사고싶습니다.',
             date: '2022-03-03 11:00:02',
         },
         {
             id:'1ad6sg45',
-            user_id: 'asd@asd.com',
+            userId: 'asd@asd.com',
             comment: '얼마든지요 얼마에 사시겠어요??',
             date: '2022-03-03 11:00:17',
         },
         {
             id:'1dfh53z',
-            user_id: 'asd@asd.com',
+            userId: 'asd@asd.com',
             comment: '참고로 5천원 이하로도 가능합니다.',
             date: '2022-03-03 11:00:17',
         },
@@ -37,54 +37,61 @@ const initialState ={
 }
 
 // middlwares
-const getcommentDB = (post_id) => {
-    // return function(dispatch, getState, {history}){
-
-    
-    // }
+const setcommentDB = (post_id) => {
+    return function(dispatch, getState, {history}){
+        apis.getcom(post_id)
+        .then(res=>{
+            dispatch(setComment(res.data))
+        })
+        .catch(err=>{
+            console.log('err',err)
+        })
+    }
 }
 
 const addcommentDB = (comment,post_id) => {
     return function(dispatch, getState, {history}){
+        apis.addcom(post_id,comment)
+        .then(()=>{
+            dispatch(setcommentDB(post_id));
+        })
+        .catch(err=>{console.log('err',err)})        
+    }
+}
 
-        
+const delcommentDB = (comId,postId) => {
+    return function(dispatch,getState, {history}){
+        apis.delcom(comId)
+        .then(()=>{
+            dispatch(setcommentDB(postId));
+        })
+        .catch(err=>{console.log('err',err)})
+    }
+}
+
+const editcommentDB = (com,id,postId) => {
+    return function(dispatch,getState, {history}){
+        apis.editcom(id,com)
+        .then(()=>{
+            dispatch(setcommentDB(postId))
+        })
+        .catch(err=>{
+            console.log('err',err)
+        })
     }
 }
 
 export default handleActions({
     [SET_COMMENT]:(state,action)=>produce(state,(draft)=>{
-        // 데이터형이 객체 또는 배열로 올 수 있음 이로인한 참조
-        // 오류 발생 가능성 있음
-        draft.comment_list = action.payload.list
-    }),
-    [ADD_COMMENT]:(state,action)=>produce(state,(draft)=>{
-        let new_com = {
-            id: 'as5dg1',
-            user_id: action.payload.user_id,
-            comment: action.payload.comment,
-            date: '2022-03-03 11:00:17'
-        }
-        draft.comment_list.push(new_com);
-    }),
-    [DEL_COMMENT]:(state,action)=>produce(state,(draft)=>{
-        draft.comment_list = draft.comment_list.filter((c)=>{
-            return c.id !== action.payload.id 
-        })
-    }),
-    [EDIT_COMMENT]:(state,action)=>produce(state,(draft)=>{
-        draft.comment_list = draft.comment_list.map((c)=>{
-            if(c.id === action.payload.id){
-                return{...c, comment: action.payload.comment}
-            }
-            return c
-        })
+        draft.comment_list = [...action.payload.list]
     }),
 },initialState)
 
 const actionCreators = {
-    addCommnet,
-    editCommnet,
-    delCommnet,
+    setcommentDB,
+    addcommentDB,
+    delcommentDB,
+    editcommentDB,
 }
 
 export {actionCreators}
